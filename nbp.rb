@@ -1,36 +1,37 @@
-class Nbp
+class NbpTable
   include HTTParty
   base_uri "http://nbp.pl/kursy/xml"
   
-  attr_accessor :type, :tables
+  attr_reader :tables
   
   def initialize(type = "a")
-    @type = type
-    @tables = get_tables
+    @tables = filtered_tables(type.downcase)
   end
   
-  def last_table
-    id = tables.last
-    get_table(id)
+  def latest
+    show(tables.last)
   end
   
-  def at(id)
-    self.class.get("/#{id}.xml")
+  def show(table_id)
+    self.class.get("/#{table_id}.xml")
   end
   
-  def gt(id)
-    tables.select { |x| tables.index(x) > tables.index(id) }
+  def after(table_id)
+    tables.select { |id| tables.index(id) > tables.index(table_id) }
   end
   
-  def lt(id)
-    tables.select { |x| tables.index(x) < tables.index(id) }
+  def before(table_id)
+    tables.select { |id| tables.index(id) < tables.index(table_id) }
   end
   
   protected
   
-  def get_tables
-    response = self.class.get("/dir.txt").split("\r\n")
-    response.select { |x| x.starts_with?(type) }
+  def published_tables
+    self.class.get("/dir.txt").split("\r\n")
+  end
+  
+  def filtered_tables(type) 
+    published_tables.select { |table_id| table_id.start_with?(type) }
   end
   
 end
