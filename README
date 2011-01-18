@@ -1,5 +1,10 @@
-require "httparty"
-require "nbp"
+Installation
+============
 
-nbp = NbpTable.new
-nbp.latest
+gem install nbp
+
+Usage
+=====
+
+table_a = Nbp::Table.new("A")
+table_a.index
