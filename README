@@ -1,0 +1,5 @@
+require "httparty"
+require "nbp"
+
+nbp = NbpTable.new
+nbp.latest
