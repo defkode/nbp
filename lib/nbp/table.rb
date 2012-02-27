@@ -22,7 +22,7 @@ module Nbp
     end
     
     def self.index
-      get("/dir.txt").split("\r\n")
+      get("/dir.txt").split("\n")
     end
     
     def self.index_of(type)
