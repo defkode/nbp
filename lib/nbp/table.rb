@@ -1,7 +1,7 @@
 module Nbp
   class Table
     include HTTParty
-    base_uri "http://nbp.pl/kursy/xml"
+    base_uri "https://www.nbp.pl/kursy/xml/"
 
     attr_reader :index
 
@@ -20,15 +20,15 @@ module Nbp
     def before(table_id)
       index.select { |id| index.index(id) < index.index(table_id) }
     end
-    
+
     def self.index
-      get("/dir.txt").split("\n")
+      get("/dir.txt").force_encoding('UTF-8').split("\r\n")
     end
-    
+
     def self.index_of(type)
       index.select { |table_id| table_id.start_with?(type) }
     end
-    
+
     def self.show(table_id)
       get("/#{table_id}.xml").parsed_response
     end
